@@ -1,0 +1,6 @@
+framework module Pods_SCG_Test {
+  umbrella header "Pods-SCG-Test-umbrella.h"
+
+  export *
+  module * { export * }
+}

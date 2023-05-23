@@ -7,7 +7,7 @@
 
 import UIKit
 
-struct APIResponse: Codable {
+class NewsModel: Decodable {
     let articles: [Article]
 }
 

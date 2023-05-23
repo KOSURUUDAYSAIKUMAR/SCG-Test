@@ -6,7 +6,7 @@
 //
 
 import UIKit
-
+let SCENE_DELEGATE = SceneDelegate()
 class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 
     var window: UIWindow?
@@ -16,6 +16,10 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         // Use this method to optionally configure and attach the UIWindow `window` to the provided UIWindowScene `scene`.
         // If using a storyboard, the `window` property will automatically be initialized and attached to the scene.
         // This delegate does not imply the connecting scene or session are new (see `application:configurationForConnectingSceneSession` instead).
+        let window = UIWindow(windowScene : scene as! UIWindowScene)
+        self.window = window
+        self.window?.makeKeyAndVisible()
+        setCustomRootViewController()
         guard let _ = (scene as? UIWindowScene) else { return }
     }
 
@@ -53,3 +57,12 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 
 }
 
+
+extension SceneDelegate {
+    func setCustomRootViewController(){
+        let newsVC = WisdomeSharedNav()
+        newsVC.viewModel = WisdomeSharedViewModel(with: .wisdomeList)
+        window?.rootViewController = newsVC
+        window!.makeKeyAndVisible()
+    }
+}

@@ -5,7 +5,7 @@
 	<key>Development</key>
 	<dict>
 		<key>ApplicationGateWay</key>
-		<string>https://newsapi.org</string>
+		<string>https://newsapi.org/v2/</string>
 	</dict>
 </dict>
 </plist>

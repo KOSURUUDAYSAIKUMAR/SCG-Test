@@ -117,15 +117,6 @@ class NetworkHandler {
     // MARK: - Private Methods
     private func getURLRequest(for router: NetworkConfiguration) -> URLRequest? {
         let urlString = self.getUrlString(for: router)
-        // retured as GET calls will not have httpBody, so appeding to the url as query parameters.
-        /*if router.method == .get {
-         if let bodyparameters = router.bodyparameters {
-         if let queryString = bodyparameters.queryString {
-         urlString.append("?\(queryString)")
-         }
-         }
-         }*/
-        
         if let url = URL(string: urlString) {
             var urlRequest = URLRequest(url: url)
             urlRequest.httpMethod = router.method.rawValue
@@ -154,7 +145,7 @@ class NetworkHandler {
                                          decode: @escaping (Decodable?, APIError?) -> Void)  {
         let jsonString = String(decoding: data, as: UTF8.self)
         do {
-            print("server response :- \(jsonString)")
+       //     print("server response :- \(jsonString)")
             let model = try JSONDecoder().decode(T.self, from: data)
             decode(model, nil)
         } catch {

@@ -8,7 +8,7 @@
 import Foundation
 
 enum WisdomeApiRouter {
-    case list(page:String)
+    case list(page:[String:Any])
     case image(id:String)
 }
 
@@ -37,9 +37,9 @@ extension WisdomeApiRouter: NetworkConfiguration {
     }
     var bodyparameters: [String : Any]? {
         switch self {
-        case .list(let page):
-            return ["page":page,
-                    "limit":"20"]
+        case .list(let urlParams):
+            return ["country":urlParams["country"]!,
+                    "apiKey":urlParams["appid"]!]
         case .image(let id):
             return ["id":id]
         }

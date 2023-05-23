@@ -9,12 +9,12 @@ import Foundation
 import UIKit
 
 class WisdomListHandler {
-    func fetchWisdomeList(page:Int, perPage:Int,completion: @escaping (APIResponse?, APIError?) ->Void){
-        let wisdomeListRouter = WisdomeApiRouter.list(page: "\(page)")
-        NetworkHandler().makeAPICall(router: wisdomeListRouter, decodingType: APIResponse.self) { (result) in
+    func fetchWisdomeList(perPage:[String:Any], completion: @escaping (NewsModel?, APIError?) ->Void) {
+        let wisdomeListRouter = WisdomeApiRouter.list(page: perPage)
+        NetworkHandler().makeAPICall(router: wisdomeListRouter, decodingType: NewsModel.self) { (result) in
             switch result {
             case .success(let model):
-                completion(model as? APIResponse, nil)
+                completion(model as? NewsModel, nil)
             case .failure(let error):
                 completion(nil, error)
             }
