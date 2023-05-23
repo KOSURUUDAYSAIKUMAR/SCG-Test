@@ -8,9 +8,9 @@
 import Foundation
 import UIKit
 
-class WisdomeSharedNav : BaseNavigationController{
+class SCGSharedNav : BaseNavigationController{
     
-    var viewModel : WisdomeSharedViewModel! {
+    var viewModel : SCGSharedViewModel! {
         didSet{
             bindViewModel()
         }
@@ -20,7 +20,7 @@ class WisdomeSharedNav : BaseNavigationController{
 
     }
 }
-extension WisdomeSharedNav {
+extension SCGSharedNav {
     private func bindViewModel(){
         viewModel.currentWorkingSharedView.bindAndFire { view in
             self.presentWIWView(view: view)
@@ -28,17 +28,17 @@ extension WisdomeSharedNav {
         
     }
 }
-extension WisdomeSharedNav{
-    private func presentWIWView(view: WisdomeSharedView){
+extension SCGSharedNav{
+    private func presentWIWView(view: SCGSharedView){
         switch view {
-        case .wisdomeList :
+        case .scgList :
                 self.presentCurrentWorkingVC()
         case .loader:
             self.loaderView()
         }
     }
 }
-extension WisdomeSharedNav {
+extension SCGSharedNav {
     private func presentCurrentWorkingVC() {
         let currentWorkingVC = NewsViewController.load(from: .main)
         currentWorkingVC.viewModel = NewsViewModel(wisdomResponder: self.viewModel)

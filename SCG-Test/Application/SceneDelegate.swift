@@ -60,8 +60,8 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 
 extension SceneDelegate {
     func setCustomRootViewController(){
-        let newsVC = WisdomeSharedNav()
-        newsVC.viewModel = WisdomeSharedViewModel(with: .wisdomeList)
+        let newsVC = SCGSharedNav()
+        newsVC.viewModel = SCGSharedViewModel(with: .scgList)
         window?.rootViewController = newsVC
         window!.makeKeyAndVisible()
     }

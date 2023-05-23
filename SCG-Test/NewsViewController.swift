@@ -11,6 +11,7 @@ import SDWebImage
 class NewsViewController: BaseViewController {
 
     @IBOutlet weak var newsTableView: UITableView!
+    private let searchVC = UISearchController(searchResultsController: nil)
     
     var viewModel: NewsViewModel? {
         didSet {
@@ -18,29 +19,43 @@ class NewsViewController: BaseViewController {
             bindViewModel()
         }
     }
+    
     // var newsVM = NewsVM.shared
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        self.title = viewModel?.title
+        createSearchBar()
+        navigationBar()
         let params = ["country": "in",
                       "appid":Secret.secretKey] as [String : String]
         viewModel?.fetchWisdomList(parameters: params)
-        
-//
-//        newsVM.getDataFromServer(params: params) { model in
-//            model.articles.forEach({ articles in
-//                print(articles.title)
-//            })
-//            print(model.articles.count)
-//        }
-        
-        var array = [1, 3, 5, 7, 9]
+
+        let array = [1, 3, 5, 7, 9]
         let middleIndex =  findMiddleIndex(array) ?? 0 // sumLeftRightElements(numberArray: [1, 3, 5, 7, 9])
         print(array[middleIndex])
         // Do any additional setup after loading the view.
     }
 
+    private func createSearchBar() {
+        searchVC.searchBar.autocapitalizationType = .allCharacters
+        searchVC.searchResultsUpdater = self
+        if #available(iOS 11.0, *) {
+            navigationItem.searchController = searchVC
+            // Make the search bar always visible.
+            navigationItem.hidesSearchBarWhenScrolling = false
+        } else {
+            // For iOS 10 and earlier, place the search controller's search bar in the table view's header.
+            newsTableView.tableHeaderView = searchVC.searchBar
+        }
+        searchVC.searchBar.delegate = self
+        searchVC.searchBar.sizeToFit()
+        searchVC.searchBar.backgroundColor = .white
+        searchVC.dimsBackgroundDuringPresentation = false // The default is true.
+//        navigationItem.searchController = searchVC
+        //        searchVC.searchBar.delegate = self
+        //        searchVC.searchBar.backgroundColor = .white
+    }
+    
     func findMiddleIndex(_ array: [Int]) -> Int? {
         let totalCount = array.count
         // Special case: Empty array
@@ -78,9 +93,25 @@ class NewsViewController: BaseViewController {
         return true
     }
     
+    func navigationBar() {
+        let label = UILabel()
+        label.text = viewModel?.title
+        label.textColor = .white
+        label.textAlignment = .center
+        label.font = UIFont.systemFont(ofSize: 25.0, weight: .bold)
+        self.navigationItem.titleView = label
+        label.translatesAutoresizingMaskIntoConstraints = false
+        label.superview?.addConstraint(NSLayoutConstraint(item: label, attribute: .centerX, relatedBy: .equal, toItem: label.superview, attribute: .centerX, multiplier: 1, constant: 0))
+        label.superview?.addConstraint(NSLayoutConstraint(item: label, attribute: .width, relatedBy: .equal, toItem: label.superview, attribute: .width, multiplier: 1, constant: 0))
+        label.superview?.addConstraint(NSLayoutConstraint(item: label, attribute: .centerY, relatedBy: .equal, toItem: label.superview, attribute: .centerY, multiplier: 1, constant: 0))
+        label.superview?.addConstraint(NSLayoutConstraint(item: label, attribute: .height, relatedBy: .equal, toItem: label.superview, attribute: .height, multiplier: 1, constant: 0))
+        
+        navigationController?.view.backgroundColor = .systemGreen
+    }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if segue.identifier == "newsDetails" {
+           
             let details = segue.destination as? UINavigationController
             let row = viewModel?.getCellViewModel(for: 0, row: sender as! Int) as? WisdomeListCellRow
             let vc = details?.topViewController as? NewsDetailsViewController
@@ -88,6 +119,13 @@ class NewsViewController: BaseViewController {
         }
     }
    
+    func willPresentSearchController(searchController: UISearchController) {
+        self.navigationController?.navigationBar.isTranslucent = true
+    }
+
+    func willDismissSearchController(searchController: UISearchController) {
+        self.navigationController?.navigationBar.isTranslucent = false
+    }
 }
 
 extension NewsViewController: UITableViewDataSource, UITableViewDelegate {
@@ -119,6 +157,7 @@ extension NewsViewController: UITableViewDataSource, UITableViewDelegate {
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        
         performSegue(withIdentifier: "newsDetails", sender: indexPath.row)
     }
 }
@@ -127,11 +166,33 @@ extension NewsViewController {
     private func bindViewModel() {
         viewModel?.tableViewCellViewModel.bind({ [self] section in
             DispatchQueue.main.async {
+               
                 self.newsTableView.reloadData()
+                self.searchVC.dismiss(animated: true, completion: nil)
             }
         })
     }
 }
 
+extension NewsViewController : UISearchBarDelegate, UISearchResultsUpdating {
+    func updateSearchResults(for searchController: UISearchController) {
+       
+    }
+    
+    //Search
+    
+    func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
+        guard let text = searchBar.text, !text.isEmpty else {
+            return
+        }
+        guard !text.trimmingCharacters(in: .whitespaces).isEmpty else {
+            return
+        }
+        let params = ["q": text,
+                      "appid":Secret.secretKey,
+                      "sortBy":"popularity"] as [String : String]
+        viewModel?.searchList(parameters: params)
+    }
+}
 
 // revolution game india private limited

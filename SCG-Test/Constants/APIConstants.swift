@@ -20,5 +20,5 @@ struct APIConstants {
 
 extension APIConstants {
     static let list = "top-headlines"
-    static let image = "list?"
+    static let search = "everything"
 }

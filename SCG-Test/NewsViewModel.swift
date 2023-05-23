@@ -71,6 +71,21 @@ extension NewsViewModel {
             self.viewStatus.value = .loaded
         }
     }
+    
+    func searchList(parameters: [String:String]){
+        viewStatus.value = .loading(loadStyle: .covering,title: "")
+        WisdomListHandler().fetchSearchList(perPage: parameters) { model, error in
+            if let err = error {
+                print(":- \(err.localizedDescription)")
+            }else{
+                if let wisdome = model{
+                    self.buildCellViewModels(items: wisdome.articles) { }
+                }
+            }
+            self.viewStatus.value = .loaded
+        }
+    }
+    
     private func buildCellViewModels(items : [Article?], completion: @escaping () -> Void) {
         var sectionTable = [WisdomeListCellViewModelBase]()
         var whoIsWorkingRow = [WisdomeListCellRow]()

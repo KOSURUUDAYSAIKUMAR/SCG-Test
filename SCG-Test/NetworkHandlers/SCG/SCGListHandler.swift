@@ -20,6 +20,18 @@ class WisdomListHandler {
             }
         }
     }
+    func fetchSearchList(perPage:[String:Any], completion: @escaping (NewsModel?, APIError?) ->Void) {
+        let wisdomeListRouter = WisdomeApiRouter.search(page: perPage)
+        NetworkHandler().makeAPICall(router: wisdomeListRouter, decodingType: NewsModel.self) { (result) in
+            switch result {
+            case .success(let model):
+                completion(model as? NewsModel, nil)
+            case .failure(let error):
+                completion(nil, error)
+            }
+        }
+    }
+    
     func fetchImage(url:String, id:String, completion: @escaping (UIImage?, APIError?) ->Void){
         NetworkHandler().downlodDirect(urlString: url,id: id) { (result) in
             switch result {

@@ -8,25 +8,25 @@
 import Foundation
 import UIKit
 
-enum WisdomeSharedView  {
-    case wisdomeList
+enum SCGSharedView  {
+    case scgList
     case loader
 }
-class WisdomeSharedViewModel : BaseViewModel {
-    let currentWorkingSharedView = Dynamic<WisdomeSharedView>(value: .wisdomeList)
+class SCGSharedViewModel : BaseViewModel {
+    let currentWorkingSharedView = Dynamic<SCGSharedView>(value: .scgList)
     
-    init(with currentWorkingSharedView: WisdomeSharedView) {
+    init(with currentWorkingSharedView: SCGSharedView) {
         super.init()
         self.currentWorkingSharedView.value = currentWorkingSharedView
     }
     
-    private func changViewState(to view: WisdomeSharedView){
+    private func changViewState(to view: SCGSharedView){
         currentWorkingSharedView.value = view
     }
 }
-extension WisdomeSharedViewModel : WisdomResponder {
+extension SCGSharedViewModel : WisdomResponder {
     func currentWorking() {
-        changViewState(to: .wisdomeList)
+        changViewState(to: .scgList)
     }
     func loaderView() {
         changViewState(to: .loader)

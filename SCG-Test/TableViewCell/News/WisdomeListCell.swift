@@ -23,7 +23,7 @@ class WisdomeListCell : UITableViewCell {
             title.text = cellViewModel.item?.title
             subtitle.text = cellViewModel.item?.description
             if let formattedDate = Date.formattedString(from: cellViewModel.item?.publishedAt ?? "") {
-                timeLabel.text = formattedDate
+                timeLabel.text = "Updated : " + formattedDate
             } else {
                 timeLabel.text = "Invalid date"
             }

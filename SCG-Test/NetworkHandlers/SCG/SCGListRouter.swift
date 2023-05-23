@@ -9,7 +9,7 @@ import Foundation
 
 enum WisdomeApiRouter {
     case list(page:[String:Any])
-    case image(id:String)
+    case search(page:[String:Any])
 }
 
 extension WisdomeApiRouter: NetworkConfiguration {
@@ -17,7 +17,7 @@ extension WisdomeApiRouter: NetworkConfiguration {
         switch self {
         case .list:
             return .get
-        case .image:
+        case .search:
             return .get
         }
     }
@@ -25,13 +25,13 @@ extension WisdomeApiRouter: NetworkConfiguration {
         switch self {
         case .list:
             return APIConstants.list
-        case .image:
-            return APIConstants.image
+        case .search:
+            return APIConstants.search
         }
     }
     var headers: [String : String]? {
         switch self {
-        case .list, .image:
+        case .list, .search:
             return ["Content-Type":"application/json"]
         }
     }
@@ -40,8 +40,10 @@ extension WisdomeApiRouter: NetworkConfiguration {
         case .list(let urlParams):
             return ["country":urlParams["country"]!,
                     "apiKey":urlParams["appid"]!]
-        case .image(let id):
-            return ["id":id]
+        case .search(page: let searchQuers):
+            return ["sortBy":searchQuers["sortBy"]!,
+                    "q":searchQuers["q"]!,
+                    "apikey":searchQuers["appid"]!]
         }
     }
 }
